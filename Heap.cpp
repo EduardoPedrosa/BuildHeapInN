@@ -1,21 +1,20 @@
 #include <iostream>
-#include <vector>
 #include <cmath>
 
 using namespace std;
 
 class Heap {
 private:
-    vector<int> vetor;
-
+    int* vetor;
+    int size;
     int filhoDireita(int indice){
         int result = (indice * 2 + 1) + 1;
-        return result >= vetor.size() ? -1 : result;
+        return result >= size ? -1 : result;
     }
 
     int filhoEsquerda(int indice){
         int result = (indice * 2 + 1);
-        return result >= vetor.size() ? -1 : result;
+        return result >= size ? -1 : result;
     }
     
     int menorFilho(int indice){
@@ -31,20 +30,20 @@ private:
         if(direita == -1) {
             return esquerda;
         }
-        return (vetor.at(esquerda)) < (vetor.at(direita)) ? esquerda : direita;
+        return (vetor[esquerda]) < (vetor[direita]) ? esquerda : direita;
     }
 
     void swap(int a, int b){ //troca os elementos do vetor que estão nas posicoes passadas por parametro
-        int aux = vetor.at(a);
-        vetor.at(a) = vetor.at(b);
-        vetor.at(b) = aux;
+        int aux = vetor[a];
+        vetor[a] = vetor[b];
+        vetor[b] = aux;
     }
 
     void heapify(){
-        int inicio = (floor(vetor.size() / 2.0f)) -1;
+        int inicio = (floor(size / 2.0f)) -1;
         for(int i = inicio; i >= 0; i--) {
             int menor = menorFilho(i);
-            if((menor != -1) and (vetor.at(menor < vetor.at(i)))){
+            if((menor != -1) and (vetor[menor < vetor[i]])){
                 swap(menor,i);
                 corrigeDescendo(menor);
             }
@@ -53,7 +52,7 @@ private:
 
     void corrigeDescendo(int indice){
         int menor = menorFilho(indice);
-        if((menor != -1) and (vetor.at(menor < vetor.at(indice)))){
+        if((menor != -1) and (vetor[menor < vetor[indice]])){
             swap(menor,indice);
             corrigeDescendo(menor);
         }
@@ -61,25 +60,45 @@ private:
 
 public:
     Heap(int quantidade){
+        vetor = new int[quantidade];
+        size = 0;
         for(unsigned int i = quantidade; i > 0; i--) {
-            vetor.push_back(i);
+            size++;
+            vetor[size-1] = i;
         }
         heapify();
     }
 
     void imprimir(){
-        for(unsigned int i = 0; i < vetor.size(); i++) {
-            cout << vetor.at(i) << " ";
+        for(unsigned int i = 0; i < size; i++) {
+            cout << vetor[i] << " ";
         }
         cout << endl;
         
     }
+
+    bool isHeap(){
+        for (int i=0; i<=(size-2)/2; i++) 
+        { 
+            if (vetor[2*i +1] < vetor[i]) {
+                    cout << "Nao e um heap" << endl;
+                    return false; 
+            }
+     
+            if (2*i+2 < size && vetor[2*i+2] < vetor[i]) {
+                    cout << "Nao e um heap" << endl;
+                    return false; 
+            }
+        } 
+        cout << "E um heap" << endl;
+        return true; 
+    } 
 };
 
 int main(){
     int quantidade;
     cin >> quantidade;
     Heap heap(quantidade);
-    heap.imprimir();
+    heap.isHeap();
     return 0;
 }

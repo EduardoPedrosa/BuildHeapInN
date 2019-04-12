@@ -43,7 +43,7 @@ private:
         int inicio = (floor(size / 2.0f)) -1;
         for(int i = inicio; i >= 0; i--) {
             int menor = menorFilho(i);
-            if((menor != -1) and (vetor[menor < vetor[i]])){
+            if((menor != -1) and (vetor[menor] < vetor[i])){
                 swap(menor,i);
                 corrigeDescendo(menor);
             }
@@ -52,7 +52,7 @@ private:
 
     void corrigeDescendo(int indice){
         int menor = menorFilho(indice);
-        if((menor != -1) and (vetor[menor < vetor[indice]])){
+        if((menor != -1) and (vetor[menor] < vetor[indice])){
             swap(menor,indice);
             corrigeDescendo(menor);
         }
@@ -99,6 +99,7 @@ int main(){
     int quantidade;
     cin >> quantidade;
     Heap heap(quantidade);
-    heap.isHeap();
+    //heap.isHeap();
+    //heap.imprimir();
     return 0;
 }

@@ -1,6 +1,8 @@
 #include <iostream>
 #include <cmath>
-
+#include <ctime>
+#include <cstdlib>
+#include <fstream>
 using namespace std;
 
 class Heap {
@@ -39,17 +41,6 @@ private:
         vetor[b] = aux;
     }
 
-    void heapify(){
-        int inicio = (floor(size / 2.0f)) -1;
-        for(int i = inicio; i >= 0; i--) {
-            int menor = menorFilho(i);
-            if((menor != -1) and (vetor[menor] < vetor[i])){
-                swap(menor,i);
-                corrigeDescendo(menor);
-            }
-        }
-    }
-
     void corrigeDescendo(int indice){
         int menor = menorFilho(indice);
         if((menor != -1) and (vetor[menor] < vetor[indice])){
@@ -62,11 +53,19 @@ public:
     Heap(int quantidade){
         vetor = new int[quantidade];
         size = 0;
+        /*srand(time(0));
+        for(unsigned int i = quantidade; i > 0; i--) {
+            size++;
+            vetor[size-1] = rand();
+        }*/
         for(unsigned int i = quantidade; i > 0; i--) {
             size++;
             vetor[size-1] = i;
         }
-        heapify();
+    }
+    
+    ~Heap(){
+        delete[] vetor;
     }
 
     void imprimir(){
@@ -75,6 +74,17 @@ public:
         }
         cout << endl;
         
+    }
+    
+    void heapify(){
+        int inicio = (floor(size / 2.0f)) -1;
+        for(int i = inicio; i >= 0; i--) {
+            int menor = menorFilho(i);
+            if((menor != -1) and (vetor[menor] < vetor[i])){
+                swap(menor,i);
+                corrigeDescendo(menor);
+            }
+        }
     }
 
     bool isHeap(){
@@ -96,10 +106,14 @@ public:
 };
 
 int main(){
-    int quantidade;
-    cin >> quantidade;
-    Heap heap(quantidade);
-    //heap.isHeap();
-    //heap.imprimir();
+    ofstream arq("saida.txt");
+    for (int i = 0; i< pow(10,3); i+=10) {
+        Heap heap(i);
+        clock_t inicio, fim;
+        inicio = clock();
+        heap.heapify();
+        fim = clock();
+        arq << "(" << i << "," << (fim-inicio) << ")\n";
+    }
     return 0;
 }

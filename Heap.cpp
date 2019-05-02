@@ -50,17 +50,20 @@ private:
     }
 
 public:
-    Heap(int quantidade){
+    Heap(int quantidade, bool randomico){
         vetor = new int[quantidade];
         size = 0;
-        /*srand(time(0));
-        for(unsigned int i = quantidade; i > 0; i--) {
-            size++;
-            vetor[size-1] = rand();
-        }*/
-        for(unsigned int i = quantidade; i > 0; i--) {
-            size++;
-            vetor[size-1] = i;
+        if(randomico){
+            srand(time(0));
+            for(unsigned int i = quantidade; i > 0; i--) {
+                size++;
+                vetor[size-1] = rand();
+            }
+        } else {
+            for(unsigned int i = quantidade; i > 0; i--) {
+                size++;
+                vetor[size-1] = i;
+            }
         }
     }
     
@@ -106,14 +109,22 @@ public:
 };
 
 int main(){
+    system("clear");
+    cout << "1) Testar com numeros randomicos" << endl;
+    cout << "2) Testar no pior caso (numeros decrescentes)" << endl;
+    int opcao;
+    cin >> opcao;
+    bool randomico = false;
+    if(opcao == 1)
+        randomico = true;
     ofstream arq("saida.txt");
-    for (int i = 0; i< pow(10,3); i+=10) {
-        Heap heap(i);
+    for (int i = 1; i< pow(10,6); i+=100) {
+        Heap heap(i,randomico);
         clock_t inicio, fim;
         inicio = clock();
         heap.heapify();
         fim = clock();
-        arq << "(" << i << "," << (fim-inicio) << ")\n";
+        arq << "(" << i << "," << (double)(fim-inicio)/CLOCKS_PER_SEC << ")\n";
     }
     return 0;
 }

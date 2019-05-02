@@ -118,13 +118,22 @@ int main(){
     if(opcao == 1)
         randomico = true;
     ofstream arq("saida.txt");
+    clock_t inicioT,fimT;
+    inicioT = clock();
+    double somaT = 0;
     for (int i = 1; i< pow(10,6); i+=100) {
         Heap heap(i,randomico);
         clock_t inicio, fim;
         inicio = clock();
         heap.heapify();
         fim = clock();
-        arq << "(" << i << "," << (double)(fim-inicio)/CLOCKS_PER_SEC << ")\n";
+        double tempoIteracao = (double)(fim-inicio)/CLOCKS_PER_SEC;
+        somaT += tempoIteracao;
+        arq << "(" << i << "," << tempoIteracao << ")\n";
     }
+    fimT = clock();
+    cout << "Execucao finalizada" << endl;
+    cout << "Tempo total: " << (double)(fimT-inicioT)/CLOCKS_PER_SEC << " segundos" << endl;
+    cout << "Tempo gasto no heapify: " << somaT << " segundos" << endl;
     return 0;
 }

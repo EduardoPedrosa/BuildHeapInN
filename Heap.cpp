@@ -41,14 +41,6 @@ private:
         vetor[b] = aux;
     }
 
-    void corrigeDescendo(int indice){
-        int menor = menorFilho(indice);
-        if((menor != -1) and (vetor[menor] < vetor[indice])){
-            swap(menor,indice);
-            corrigeDescendo(menor);
-        }
-    }
-
 public:
     Heap(int quantidade, bool randomico){
         vetor = new int[quantidade];
@@ -56,13 +48,13 @@ public:
         if(randomico){
             srand(time(0));
             for(unsigned int i = quantidade; i > 0; i--) {
+                vetor[size] = rand();
                 size++;
-                vetor[size-1] = rand();
             }
         } else {
             for(unsigned int i = quantidade; i > 0; i--) {
+                vetor[size] = i;
                 size++;
-                vetor[size-1] = i;
             }
         }
     }
@@ -85,7 +77,17 @@ public:
             int menor = menorFilho(i);
             if((menor != -1) and (vetor[menor] < vetor[i])){
                 swap(menor,i);
-                corrigeDescendo(menor);
+                int menorF = menorFilho(menor);
+                bool acabou = false;
+                while((menorF != -1)&&(!acabou)){
+					if(vetor[menorF] < vetor[menor]){
+						swap(menorF,menor);
+						menor = menorF;
+						menorF = menorFilho(menor);
+					} else {
+						acabou = true;
+					}
+				}
             }
         }
     }
@@ -109,7 +111,7 @@ public:
 };
 
 int main(){
-    system("clear");
+    //system("clear");
     cout << "1) Testar com numeros randomicos" << endl;
     cout << "2) Testar no pior caso (numeros decrescentes)" << endl;
     int opcao;
@@ -129,7 +131,7 @@ int main(){
         fim = clock();
         double tempoIteracao = (double)(fim-inicio)/CLOCKS_PER_SEC;
         somaT += tempoIteracao;
-        arq << "(" << i << "," << tempoIteracao << ")\n";
+        arq << i << "," << tempoIteracao << endl;
     }
     fimT = clock();
     cout << "Execucao finalizada" << endl;

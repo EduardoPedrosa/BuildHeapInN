@@ -123,7 +123,7 @@ int main(){
     clock_t inicioT,fimT;
     inicioT = clock();
     double somaT = 0;
-    for (int i = 1; i< pow(10,6); i+=100) {
+    for (int i = 1; i< pow(10,6); i+=1000) {
         Heap heap(i,randomico);
         clock_t inicio, fim;
         inicio = clock();
